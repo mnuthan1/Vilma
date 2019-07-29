@@ -1,3 +1,13 @@
 
 filestore:
-    baseUrl: /Users/nmallavaram/files
+    baseUrl: /home/nmallavaram/workspace/Vilma/
+
+spring:
+    datasource:
+        url: jdbc:h2:mem:testdb  
+        driverClassName: org.h2.Driver  
+        username: sa  
+        password:
+    h2:
+        console:
+            enabled: true
