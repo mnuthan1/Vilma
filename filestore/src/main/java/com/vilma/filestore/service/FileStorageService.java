@@ -2,10 +2,12 @@ package com.vilma.filestore.service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import com.vilma.filestore.entity.File;
 import com.vilma.filestore.exceptions.FileStorageException;
@@ -79,17 +81,24 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String id) throws IOException {
+        File fileObj = fileRepo.findById(UUID.fromString(id));
         try {
-            Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
-            Resource resource = new UrlResource(filePath.toUri());
+            
+            URI uri = fileObj.getPath().resolve(fileObj.getId().toString());
+            Resource resource = new UrlResource(uri);
+            /* create copy of file with original name */
+            Path tempPath = Paths.get(this.fileStorageLocation +"/tmp/" + fileObj.getName());
+            Files.copy(resource.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
+            uri = tempPath.toUri();
+            resource = new UrlResource(uri);
             if (resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("File not found " + fileName);
+                throw new MyFileNotFoundException("File not found " + fileObj.getName());
             }
         } catch (MalformedURLException ex) {
-            throw new MyFileNotFoundException("File not found " + fileName);
+            throw new FileStorageException(String.format("Error While retrieve file %s:%s", fileObj.getName(),ex.getMessage()));
         }
     }
 }

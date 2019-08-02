@@ -1,4 +1,4 @@
-create table file
+create table "file"
 (
     id varchar(20) not null,
     name varchar(100) not null,

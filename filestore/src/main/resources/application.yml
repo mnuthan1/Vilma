@@ -1,6 +1,7 @@
-
+server:
+    port: 9090
 filestore:
-    baseUrl: /home/nmallavaram/workspace/Vilma/
+    baseUrl: /home/nmallavaram/workspace/vilma/filestore/store
 
 spring:
     datasource:
