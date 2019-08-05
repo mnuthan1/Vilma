@@ -7,6 +7,7 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'se.transmode.gradle:gradle-docker:1.2'
 	}
 }
 
@@ -14,6 +15,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'docker'
 
 group = 'com.vilma'
 version = '0.0.1-SNAPSHOT'
@@ -25,6 +27,7 @@ repositories {
 
 
 dependencies {
+	
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 	runtimeOnly('com.h2database:h2')
@@ -39,3 +42,22 @@ test {
         showStandardStreams = true
     }
 }
+
+docker {
+    baseImage "openjdk:11-slim"
+    maintainer 'Nuthan Kumar "mnuthan@gmail.com"'
+}
+
+task buildDocker(type: Docker) {
+	applicationName = "fileserver"
+	addFile {
+		from jar
+		rename {'fileserver_app.jar'}
+	}
+	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/fileserver_app.jar'])
+	// for temp variables
+	volume("/store/tmp")
+	exposePort(9090)
+}
+
+buildDocker.dependsOn(build)
