@@ -8,6 +8,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath 'se.transmode.gradle:gradle-docker:1.2'
+		classpath 'org.owasp:dependency-check-gradle:5.2.1'
 	}
 }
 
@@ -16,6 +17,12 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
+apply plugin: 'org.owasp.dependencycheck'
+apply plugin: 'jacoco'
+
+jacoco {
+  toolVersion = "0.8.2"
+}
 
 group = 'com.vilma'
 version = '0.0.1-SNAPSHOT'
@@ -35,12 +42,6 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-data-jpa")
 	compile "io.springfox:springfox-swagger2:2.9.2"
 	compile "io.springfox:springfox-swagger-ui:2.9.2"
-}
-
-test {
-    testLogging {
-        showStandardStreams = true
-    }
 }
 
 docker {

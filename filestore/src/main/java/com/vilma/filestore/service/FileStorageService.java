@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import com.vilma.filestore.entity.File;
 import com.vilma.filestore.exceptions.FileStorageException;
+import com.vilma.filestore.exceptions.InvalidFileException;
 import com.vilma.filestore.exceptions.MyFileNotFoundException;
 import com.vilma.filestore.repo.FileRepository;
 import com.vilma.filestore.util.FileUtil;
@@ -89,6 +90,10 @@ public class FileStorageService {
             Resource resource = new UrlResource(uri);
             /* create copy of file with original name */
             Path tempPath = Paths.get(this.fileStorageLocation +"/tmp/" + fileObj.getName());
+            if(!fileObj.getCehcksum().equals(FileUtil.getMd5Checksum(resource.getInputStream())))
+            {
+                throw new InvalidFileException(String.format("Error while verifying checksum on %s",fileObj.getName()));
+            } 
             Files.copy(resource.getInputStream(), tempPath, StandardCopyOption.REPLACE_EXISTING);
             uri = tempPath.toUri();
             resource = new UrlResource(uri);

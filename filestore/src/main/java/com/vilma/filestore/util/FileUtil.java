@@ -1,6 +1,7 @@
 package com.vilma.filestore.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +42,21 @@ public class FileUtil {
      * @since 1.0
      */
     public static String getMd5Checksum(MultipartFile file) throws IOException {
-        return DigestUtils.md5DigestAsHex(file.getInputStream());
+        return getMd5Checksum(file.getInputStream());
+    }
+
+    /**
+     * <p>
+     * Method to create MD5 checksum for given MultipartFile
+     * </p>
+     * 
+     * @param stream Input stream
+     * @return String md5 checksum
+     * @throws IOException
+     * @since 1.0
+     */
+    public static String getMd5Checksum(InputStream stream) throws IOException {
+        return DigestUtils.md5DigestAsHex(stream);
     }
 
 }

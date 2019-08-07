@@ -3,7 +3,9 @@ package com.vilma.filestore.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 
@@ -56,6 +58,21 @@ public class FileUtilTest {
         MultipartFile simpleFile = new MockMultipartFile("fileThatDoesNotExists.txt", "fileThatDoesNotExists.txt",
         "text/plain", "This is a dummy file content".getBytes(StandardCharsets.UTF_8));
         assertEquals("2136EF28FC423F94A7E5E5636B182C6C", FileUtil.getMd5Checksum(simpleFile).toUpperCase());
+    }
+
+    /**
+     * <p>
+     * Tests for checksum util method
+     * </p>
+     * 
+     * @throws IOException
+     * @throws NoSuchAlgorithmException
+     */
+    @Test
+    public void testStreamChecksum() throws NoSuchAlgorithmException, IOException {
+
+        InputStream targetStream = new ByteArrayInputStream("This is a dummy file content".getBytes(StandardCharsets.UTF_8));
+        assertEquals("2136EF28FC423F94A7E5E5636B182C6C", FileUtil.getMd5Checksum(targetStream).toUpperCase());
     }
 
 
