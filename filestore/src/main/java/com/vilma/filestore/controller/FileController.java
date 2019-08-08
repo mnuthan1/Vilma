@@ -1,9 +1,9 @@
 package com.vilma.filestore.controller;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,18 +27,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class FileController {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private FileStorageService fileStorageService;
-    
-    @GetMapping(value= {"/file/{id}"})
+
+    @GetMapping(value = { "/file/{id}", "file/{id}/revision/latest" })
     public ResponseEntity<Resource> downloadFile(@PathVariable String id, HttpServletRequest request)
             throws IOException {
         // Load file as Resource
         Resource resource = fileStorageService.loadFileAsResource(id);
-
         // Try to determine file's content type
         String contentType = null;
         try {
@@ -48,37 +47,26 @@ public class FileController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 
-    //TODO include application name in the input 
-    @PostMapping("/file")
-    public File uploadFile(@RequestParam("file") MultipartFile file) throws NoSuchAlgorithmException {
+    // TODO include application name in the input
+    @PostMapping(value= {"/file", "/file/{id}"} )
+    public File uploadFile(@PathVariable Optional<String> id, @RequestParam("file") MultipartFile file) {
         logger.info("Uploading File");
-        return fileStorageService.storeFile(file);
+        return fileStorageService.storeFile(id, file);
     }
 
-    @PostMapping(value= {"/files"},consumes = { "multipart/form-data" })
-    public List<File> uploadFiles(@RequestParam("files") MultipartFile[] files) throws NoSuchAlgorithmException {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> {
-                    try {
-                        return uploadFile(file);
-                    } catch (NoSuchAlgorithmException e) {
-                        logger.error("Error While uploading file %s:%s", file.getName(), e.getMessage());
-                        return null;
-                        //TODO return proper error message in the file
-                    }
-                    
-                })
-                .collect(Collectors.toList());
+    @PostMapping(value = { "/files" }, consumes = { "multipart/form-data" })
+    public List<File> uploadFiles(@RequestParam("files") MultipartFile[] files) {
+        return Arrays.asList(files).stream().map(file -> {
+            return fileStorageService.storeFile(Optional.ofNullable(null), file);
+        }).collect(Collectors.toList());
     }
 }
