@@ -65,7 +65,7 @@ public class FileStorageService {
      * </p>
      * 
      * @param id Optional existing file id
-     * @param file MultiparFile to store
+     * @param file MultipartFile to store
      * @return File object with id
      * @throws
      * InvalidFileException
@@ -122,7 +122,7 @@ public class FileStorageService {
             current.setPath(targetLocation.toUri());
             current.setHashName(hashName);
             current.setSize(file.getSize());
-            current.setCehcksum(FileUtil.getMd5Checksum(file));
+            current.setChecksum(FileUtil.getMd5Checksum(file));
             logger.debug("Saving new version:" + fileName);
             current = verRepo.save(current);
             /* create a new version if the id presents */
@@ -174,7 +174,7 @@ public class FileStorageService {
             Resource resource = new UrlResource(uri);
             /* create copy of file with original name */
             Path tempPath = Paths.get(this.fileStorageLocation +"/tmp/" + fileObj.getName());
-            if(!latest.getCehcksum().equals(FileUtil.getMd5Checksum(resource.getInputStream())))
+            if(!latest.getChecksum().equals(FileUtil.getMd5Checksum(resource.getInputStream())))
             {
                 throw new InvalidFileException(String.format("Error while verifying checksum on %s",fileObj.getName()));
             } 

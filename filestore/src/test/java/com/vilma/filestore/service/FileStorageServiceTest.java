@@ -60,7 +60,7 @@ public class FileStorageServiceTest extends AbstractTest {
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
         Version ver = verRepo.findLatestVersionsByFileId(file.getId());
         assertEquals(28, ver.getSize());
-        assertEquals("2136EF28FC423F94A7E5E5636B182C6C", ver.getCehcksum().toUpperCase());
+        assertEquals("2136EF28FC423F94A7E5E5636B182C6C", ver.getChecksum().toUpperCase());
     }
 
     @Test
@@ -77,7 +77,7 @@ public class FileStorageServiceTest extends AbstractTest {
 
         Version ver = verRepo.findLatestVersionsByFileId(file.getId());
         assertEquals("Incorrect File size", 45, ver.getSize());
-        assertEquals("Incorrect File checksum", "B5859B4D5A1A34A9F3877A586F072047", ver.getCehcksum().toUpperCase());
+        assertEquals("Incorrect File checksum", "B5859B4D5A1A34A9F3877A586F072047", ver.getChecksum().toUpperCase());
         assertEquals("Invalid number of versions", 2, fileStorageService.getVersions(file.getId().toString()).size());
     }
 

@@ -9,16 +9,21 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Data
 public class File {
     /** File object uniq ID */
@@ -35,12 +40,14 @@ public class File {
      * created user
      */
     @Column(name = "created_by")
+    @CreatedBy
     private String createdBy;
 
     /**
      * last modified user
      */
     @Column(name = "last_modified_by")
+    @LastModifiedBy
     private String lastModifiedBy;
 
     /**
@@ -48,7 +55,7 @@ public class File {
      */
     @CreatedDate
     @Column(name = "created_date")
-    private Date crreatedDate;
+    private Date createdDate;
 
     /**
      * last modified date
@@ -56,20 +63,4 @@ public class File {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
-
-    /**
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-        // TODO update with actual user
-    }
-
-    /**
-     * @param lastModifiedBy the lastModifiedBy to set
-     */
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-        // TODO update with actual user
-    }
 }
