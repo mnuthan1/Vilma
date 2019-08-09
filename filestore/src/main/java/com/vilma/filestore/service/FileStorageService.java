@@ -161,6 +161,9 @@ public class FileStorageService {
     public Resource loadFileAsResource(String id, int ver) throws IOException {
 
         File fileObj = fileRepo.findById(UUID.fromString(id));
+        if(fileObj == null) {
+            throw new MyFileNotFoundException("File not found " + id);
+        }
         logger.debug("loading latest version:");
         Version latest = (ver == -1) ? verRepo.findLatestVersionsByFileId(UUID.fromString(id)): verRepo.findVersionByFileId(UUID.fromString(id), ver);
         if(latest == null) {
