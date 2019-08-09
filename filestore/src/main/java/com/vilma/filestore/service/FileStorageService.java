@@ -15,6 +15,7 @@ import com.vilma.filestore.entity.File;
 import com.vilma.filestore.entity.Version;
 import com.vilma.filestore.exceptions.FileStorageException;
 import com.vilma.filestore.exceptions.InvalidFileException;
+import com.vilma.filestore.exceptions.InvalidFileVersionException;
 import com.vilma.filestore.exceptions.MyFileNotFoundException;
 import com.vilma.filestore.repo.FileRepository;
 import com.vilma.filestore.repo.VersionRepository;
@@ -161,7 +162,10 @@ public class FileStorageService {
 
         File fileObj = fileRepo.findById(UUID.fromString(id));
         logger.debug("loading latest version:");
-        Version latest = ver == -1 ? verRepo.findLatestVersionsByFileId(UUID.fromString(id)): verRepo.findVersionByFileId(UUID.fromString(id), ver);
+        Version latest = (ver == -1) ? verRepo.findLatestVersionsByFileId(UUID.fromString(id)): verRepo.findVersionByFileId(UUID.fromString(id), ver);
+        if(latest == null) {
+            throw new InvalidFileVersionException(String.format("Invalid file %s version %d",fileObj.getName(),ver));
+        }
         try {
             URI uri = latest.getPath().resolve(latest.getHashName());
             Resource resource = new UrlResource(uri);
