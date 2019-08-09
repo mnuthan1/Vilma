@@ -52,5 +52,6 @@ git clone https://github.com/mnuthan1/vilma.git
 
 ## Features
 
-* uploaded files are stored in hashed buckets
-* files are renamed with uniq ID on disk for security reasons
+* File upload and download
+* File versioning capabilities
+* File names are hashed with unique string

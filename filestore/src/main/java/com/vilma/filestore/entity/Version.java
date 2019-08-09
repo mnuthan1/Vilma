@@ -1,9 +1,10 @@
 /**
-Entity class to represent File object
+Entity class to represent File version object
 @author Nuthan Kumar (mnuthan@gmail.com)
 */
 package com.vilma.filestore.entity;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.UUID;
 
@@ -21,21 +22,45 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Data
-public class File {
+@EntityListeners(AuditingEntityListener.class)
+public class Version {
     /** File object uniq ID */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private UUID id;
+    
+    /** File store path */
+    @ToString.Exclude
+    @Column(name = "path")
+    private URI path;
+    
+    /** File id */
+    @Column(name = "file_id", nullable = false)
+    private UUID fileId;
+    
+    /** File size in bytes*/
+    @Column(name = "size")
+    private long size;
+    
+    /** MD5 checksum */
+    @Column(name = "checksum", nullable = false)
+    private String checksum;
 
-    /** File name */
-    @Column(name = "name", nullable = false)
-    private String name;
+    /** Version number */
+    @Column(name = "ver", nullable = false)
+    private int ver;
 
+    /** Next version id */
+    @Column(name = "next_ver_id")
+    private UUID nextVerId;
+
+    @Column(name = "hash_name", nullable = false)
+    private String hashName;
     /**
      * created user
      */
