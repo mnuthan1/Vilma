@@ -9,22 +9,30 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.vilma.filestore.AbstractTest;
 import com.vilma.filestore.entity.File;
 import com.vilma.filestore.entity.Version;
 import com.vilma.filestore.exceptions.InvalidFileException;
+import com.vilma.filestore.exceptions.InvalidFileVersionException;
+import com.vilma.filestore.exceptions.MyFileNotFoundException;
 import com.vilma.filestore.repo.FileRepository;
 import com.vilma.filestore.repo.VersionRepository;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ Files.class})
 public class FileStorageServiceTest extends AbstractTest {
 
     @Autowired
@@ -38,6 +46,15 @@ public class FileStorageServiceTest extends AbstractTest {
 
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
+
+    @Test
+    public void testFileStoreNewFileInvalidName() {
+        MultipartFile simpleFile = new MockMultipartFile("fileThatDoesNotExists..txt", "fileThatDoesNotExists..txt",
+                "text/plain", "This is a dummy file content".getBytes(StandardCharsets.UTF_8));
+        expectedEx.expect(InvalidFileException.class);
+        expectedEx.expectMessage("Sorry! Filename contains invalid path sequence fileThatDoesNotExists..txt");
+        fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
+    }
 
     @Test
     public void testFileStoreNewFile() throws NoSuchAlgorithmException, IOException {
@@ -56,7 +73,7 @@ public class FileStorageServiceTest extends AbstractTest {
                 "text/plain", "This is a dummy file content".getBytes(StandardCharsets.UTF_8));
         File file = null;
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
-        /* stroing new version */
+        /* storing new version */
         simpleFile = new MockMultipartFile("fileThatDoesNotExists.txt", "fileThatDoesNotExists.txt", "text/plain",
                 "This is a dummy file content with new version".getBytes(StandardCharsets.UTF_8));
 
@@ -74,7 +91,7 @@ public class FileStorageServiceTest extends AbstractTest {
                 "text/plain", "This is a dummy file content".getBytes(StandardCharsets.UTF_8));
         File file = null;
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
-        /* stroing new version */
+        /* storing new version */
         simpleFile = new MockMultipartFile("fileThatDoesNotExists.txt", "fileThatDoesNotExists_new.txt", "text/plain",
                 "This is a dummy file content with new version".getBytes(StandardCharsets.UTF_8));
 
@@ -172,4 +189,40 @@ public class FileStorageServiceTest extends AbstractTest {
         assertEquals(fileContent, results.toString());
         assertEquals(res.getFile().getName(), fileName);
     }
+
+    @Test
+    public void testFileRetrieveInvalidVer() throws IOException {
+        String fileContent = "This is a dummy file content\n new line";
+        String fileName = "fileThatDoesNotExists.txt";
+        MultipartFile simpleFile = new MockMultipartFile(fileName, fileName, "text/plain",
+                fileContent.getBytes(StandardCharsets.UTF_8));
+        File file = null;
+        file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
+
+        expectedEx.expect(InvalidFileVersionException.class);
+        expectedEx.expectMessage("Invalid file fileThatDoesNotExists.txt version 2");
+        fileStorageService.loadFileAsResource(file.getId().toString(),2);
+    }
+
+    @Test
+    public void testFileRetrieveInvalidFile() throws IOException {
+        expectedEx.expect(MyFileNotFoundException.class);
+        UUID temp = UUID.randomUUID();
+        expectedEx.expectMessage("File not found "+temp.toString());
+        fileStorageService.loadFileAsResource(temp.toString(),2);
+    }
+
+   /* public void testCreateDirectoriesError() throws IOException {
+        PowerMockito.mockStatic(Files.class);
+        PowerMockito.when(Files.createDirectories(any(Path.class))).thenThrow(NullPointerException.class);
+        
+        String fileContent = "This is a dummy file content\n new line";
+        String fileName = "fileThatDoesNotExists.txt";
+        MultipartFile simpleFile = new MockMultipartFile(fileName, fileName, "text/plain",
+                fileContent.getBytes(StandardCharsets.UTF_8));
+        
+         fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
+    }*/
+
+   
 }

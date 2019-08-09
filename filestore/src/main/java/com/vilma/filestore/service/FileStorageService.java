@@ -69,7 +69,7 @@ public class FileStorageService {
      * @return File object with id
      * @throws
      * InvalidFileException
-     *      if the file name contains invalid path sequece ..
+     *      if the file name contains invalid path sequence ..
      * FileStorageException 
      *      Error while storing file on file store
      * 
@@ -139,7 +139,7 @@ public class FileStorageService {
     }
     /**
      * <p>
-     * Method to retrive all version of a file
+     * Method to retrieve all version of a file
      * if the file id is provided then it will create new version of the
      * exiting file
      * </p>
