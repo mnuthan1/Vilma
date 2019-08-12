@@ -137,6 +137,27 @@ public class FileStorageService {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
+
+    /**
+     * <p>
+     * Method to retrieve file meta data information
+     * </p>
+     * 
+     * @param id file id
+     * @return List<Version> object with id
+     * @since 1.0
+     */
+    public File getFileMetaData(String id) {
+        File fileObj = fileRepo.findById(UUID.fromString(id));
+        if (fileObj == null )
+        {
+            throw new MyFileNotFoundException(String.format("File not found %s",id));
+        }
+        List<Version> vers = verRepo.findAllVersionsByFileId(UUID.fromString(id));
+        fileObj.setVersions(vers);
+        return fileObj;
+    }
+
     /**
      * <p>
      * Method to retrieve all version of a file
@@ -154,10 +175,36 @@ public class FileStorageService {
     public List<Version> getVersions(String id) {
         return verRepo.findAllVersionsByFileId(UUID.fromString(id));
     }
+
+    /**
+     * <p>
+     * Method to retrieve latest version of physical file content
+     * </p>
+     * 
+     * @param id file id
+     * @return Resource with File content
+     * @throws
+     * IOException
+     * 
+     * @since 1.0
+     */    
     public Resource loadFileAsResource(String id) throws IOException {
         return loadFileAsResource(id, -1);
     }
 
+     /**
+     * <p>
+     * Method to retrieve specific version of physical file content
+     * </p>
+     * 
+     * @param id file id
+     * @param ver file version number (-1 to get latest version)
+     * @return Resource with File content
+     * @throws
+     * IOException
+     * 
+     * @since 1.0
+     */
     public Resource loadFileAsResource(String id, int ver) throws IOException {
 
         File fileObj = fileRepo.findById(UUID.fromString(id));
