@@ -48,6 +48,13 @@ public class FileController {
         return generateFileResponse(resource, request);
     }
 
+    @ApiOperation(value = "Gets file meta data")
+    @GetMapping(value = { "file/{id}/meta-data" })
+    public File getFileMetaData(@PathVariable String id)
+            throws IOException {
+        return fileStorageService.getFileMetaData(id);
+    }
+
     @ApiOperation(value = "Gets a specific version of given file id")
     @GetMapping(value = { "file/{id}/revision/{ver}" })
     public ResponseEntity<Resource> downloadFileVersion(@PathVariable String id,@PathVariable int ver, HttpServletRequest request)

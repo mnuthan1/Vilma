@@ -5,6 +5,7 @@ Entity class to represent File object
 package com.vilma.filestore.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -63,4 +65,10 @@ public class File {
     @LastModifiedDate
     @Column(name = "last_modified_date")
     private Date lastModifiedDate;
+
+    /**
+     * versions - Transient to avoid data base persistence
+     */
+    @Transient
+    private List<Version> versions;
 }

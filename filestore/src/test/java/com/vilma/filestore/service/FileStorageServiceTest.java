@@ -208,4 +208,29 @@ public class FileStorageServiceTest extends AbstractTest {
         expectedEx.expectMessage("File not found " + temp.toString());
         fileStorageService.loadFileAsResource(temp.toString(), 2);
     }
+
+    @Test
+    public void testFileRetrieveInvalidFileMetaData() throws IOException {
+        expectedEx.expect(MyFileNotFoundException.class);
+        UUID temp = UUID.randomUUID();
+        expectedEx.expectMessage("File not found " + temp.toString());
+        fileStorageService.getFileMetaData(temp.toString());
+    }
+
+    @Test
+    public void testFileRetrieveFileMetaData() throws IOException {
+        String fileContent = "This is a dummy file content\n new line";
+        String fileName = "fileThatDoesNotExists.txt";
+        MultipartFile simpleFile = new MockMultipartFile(fileName, fileName, "text/plain",
+                fileContent.getBytes(StandardCharsets.UTF_8));
+        File file = null;
+        file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
+
+        file = fileStorageService.getFileMetaData(file.getId().toString());
+        assertEquals("invalid number of versions", 1, file.getVersions().size());
+        // create another version
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
+        file = fileStorageService.getFileMetaData(file.getId().toString());
+        assertEquals("invalid number of versions", 2, file.getVersions().size());
+    }
 }
