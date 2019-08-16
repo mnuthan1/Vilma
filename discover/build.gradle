@@ -18,11 +18,6 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'docker'
 apply plugin: 'org.owasp.dependencycheck'
-apply plugin: 'jacoco'
-
-jacoco {
-  toolVersion = "0.8.2"
-}
 
 group = 'com.vilma'
 version = '0.0.1-SNAPSHOT'
@@ -36,16 +31,13 @@ ext {
   set('springCloudVersion', "Greenwich.SR2")
 }
 dependencies {
-	
-	implementation('org.springframework.boot:spring-boot-starter-web')
-	runtimeOnly('org.springframework.boot:spring-boot-devtools')
-	runtimeOnly('com.h2database:h2')
-	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	compile("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	compile "io.springfox:springfox-swagger2:2.9.2"
-	compile "io.springfox:springfox-swagger-ui:2.9.2"
-	compileOnly "org.projectlombok:lombok:1.18.8"
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+  // required for java 11 or above
+  compile group: 'com.sun.xml.bind', name: 'jaxb-core', version: '2.3.0.1'
+  compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+  compile group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '2.3.1'
+  // end java 11 dependencies
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 dependencyManagement {
@@ -60,15 +52,13 @@ docker {
 }
 
 task buildDocker(type: Docker) {
-	applicationName = "fileserver"
+	applicationName = "discovery"
 	addFile {
 		from jar
-		rename {'fileserver_app.jar'}
+		rename {'discovery.jar'}
 	}
-	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/fileserver_app.jar'])
-	// for temp variables
-	volume("/store/tmp")
-	exposePort(9090)
+	entryPoint(['java', '-Djava.security.egd=file:/dev/./urandom', '-jar', '/discovery.jar'])
+	exposePort(9999)
 }
 
 buildDocker.dependsOn(build)
