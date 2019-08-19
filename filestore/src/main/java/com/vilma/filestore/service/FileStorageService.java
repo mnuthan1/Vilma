@@ -44,7 +44,8 @@ public class FileStorageService {
     public FileStorageService(@Value("${filestore.baseUrl}") final String baseUrl) {
         this.fileStorageLocation = Paths.get(baseUrl).toAbsolutePath().normalize();
         try {
-            Files.createDirectories(this.fileStorageLocation);
+            // create storage location and tmp folder
+            Files.createDirectories(Paths.get(this.fileStorageLocation +"/tmp/" ));
         } catch (Exception ex) {
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.",
                     ex);
