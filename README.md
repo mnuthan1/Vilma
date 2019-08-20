@@ -89,3 +89,42 @@ Simple File-store service with file upload, download and versioning capabilities
 ```html
     http://localhost:9090
 ```
+
+## With Kubernetes
+
+- Prerequisites
+  - Minikube
+  - Kubectl
+  - ambassdor add-on
+  ```bash
+  kubectl apply -f https://getambassador.io/yaml/ambassador/ambassador-rbac.yaml
+  ```
+- config Minikube to use local dockage images
+  - setup env variables
+  ```bash
+  eval $(minikube docker-env)
+  ```
+  - Build the image with the Docker daemon of Minikube
+  ```bash
+  cd filestore
+  docker build -t com.vilma/fileserver:0.0.1-SNAPSHOT .
+  ```
+  - Start ambassodor api gate way
+  ```bash
+  kubectl apply -f  k8s_ambassador_svc.yml
+  ```
+
+  - Create k8s Pod
+  ```bash
+  kubectl create -f k8s_file_store_deploy.yml
+
+  ```
+  - ~~Set the imagePullPolicy to Never, to avoid pulling images~~
+  <pre><s> kubectl run spring-microservices-pod --image=com.vilma/fileserver:0.0.1-SNAPSHOT --image-pull-policy=Never </s></pre>
+  - Test your app
+    - Get Service url
+    ```bash
+    minikube service hello-minikube --url
+    ```
+    - Copy URL in to browser for testing
+
