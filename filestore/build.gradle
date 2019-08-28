@@ -72,3 +72,8 @@ task buildDocker(type: Docker) {
 }
 
 buildDocker.dependsOn(build)
+
+// avoid starting eureka client during test phase
+tasks.withType(Test) {
+    systemProperty 'eureka.client.enabled', 'false'
+}

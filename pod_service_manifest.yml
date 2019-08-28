@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: spring-microservices-pod
+  labels:
+    version: v1
+spec:
+  containers:
+  - name: file-store
+    image: com.vilma/fileserver:0.0.1-SNAPSHOT
+    ports:
+    - containerPort: 8888

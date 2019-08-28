@@ -46,5 +46,8 @@ spec:
       containers:
       - name: file-store
         image: com.vilma/fileserver:0.0.1-SNAPSHOT
+        env:
+        - name: eureka.client.enabled
+          value: false
         ports:
         - containerPort: 9090

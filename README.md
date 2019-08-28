@@ -8,6 +8,13 @@ This repo includes following Spring boot projects
 - Spring Cloud API Gateway `(sub-folder:`_`gateway`_`)`
 - File-Store spring boot application `(sub-folder:`_`filestore`_`)`
 
+## Starting all services
+
+```bash
+gradle build
+gradle bootRun --parallel
+```
+
 ## Startup Eureka Discovery Service
 
 In a microservice architecture, service discovery is one of the key tenets. Service discovery allows services to find and communicate with each other with out hard coding hostname/port.

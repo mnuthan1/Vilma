@@ -1,0 +1,2 @@
+rootProject.name = 'vilma_microservices'
+include 'discover', 'gateway', 'filestore'
