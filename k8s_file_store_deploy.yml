@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: file-store
+  annotations:
+    getambassador.io/config: |
+      ---
+      apiVersion: ambassador/v1
+      kind:  Mapping
+      name:  file_store_mapping
+      prefix: /file-store/
+      service: file-store:9090
+  labels:
+    name: file-store
+    contains: foundations
+spec:
+  type: NodePort
+  ports:
+  - port: 9090
+    targetPort: 9090
+    protocol: TCP
+    name: http-1
+  - port: 443
+    protocol: TCP
+    name: https-1
+  selector:
+    name: file-store
+    contains: foundations
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: file-store
+spec:
+  selector:
+    matchLabels:
+      name: file-store
+      contains: foundations
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: file-store
+        contains: foundations
+    spec:
+      containers:
+      - name: file-store
+        image: com.vilma/fileserver:0.0.1-SNAPSHOT
+        env:
+        - name: eureka.client.enabled
+          value: false
+        ports:
+        - containerPort: 9090
