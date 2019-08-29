@@ -1,0 +1,20 @@
+server:
+    port: 9898
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8888/eureka
+
+spring:
+    application:
+        name: core-service
+    datasource:
+        url: jdbc:postgresql://localhost:5432/core
+        username:
+        password:
+    jpa:
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
