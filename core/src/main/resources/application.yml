@@ -9,9 +9,9 @@ spring:
     application:
         name: core-service
     datasource:
-        url: jdbc:postgresql://localhost:5432/core
-        username:
-        password:
+        url: jdbc:postgresql://127.0.01:5432/core
+        username: core_admin
+        password: admin123
     jpa:
         properties:
             hibernate:
