@@ -86,7 +86,7 @@ public class FileStorageService {
         /* create a new version if the id presents */
         if(id.isPresent())
         {
-            fileObj = fileRepo.findById(UUID.fromString(id.get()));
+            fileObj = fileRepo.findByUuid(UUID.fromString(id.get()));
             if(!fileObj.getName().equals(fileName))
             {
                 throw new InvalidFileException(
@@ -102,7 +102,7 @@ public class FileStorageService {
             fileObj.setName(fileName);
             fileObj = fileRepo.save(fileObj);
         }
-        current.setFileId(fileObj.getId());
+        current.setFileId(fileObj.getUuid());
         logger.debug("Uploading file:" + fileName);
         try {
             // Check if the file's name contains invalid characters
@@ -149,7 +149,7 @@ public class FileStorageService {
      * @since 1.0
      */
     public File getFileMetaData(String id) {
-        File fileObj = fileRepo.findById(UUID.fromString(id));
+        File fileObj = fileRepo.findByUuid(UUID.fromString(id));
         if (fileObj == null )
         {
             throw new MyFileNotFoundException(String.format("File not found %s",id));
@@ -208,7 +208,7 @@ public class FileStorageService {
      */
     public Resource loadFileAsResource(String id, int ver) throws IOException {
 
-        File fileObj = fileRepo.findById(UUID.fromString(id));
+        File fileObj = fileRepo.findByUuid(UUID.fromString(id));
         if(fileObj == null) {
             throw new MyFileNotFoundException("File not found " + id);
         }

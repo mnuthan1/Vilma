@@ -31,8 +31,8 @@ public class File {
     /** File object uniq ID */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    @Column(name = "uuid", nullable = false)
+    private UUID uuid;
 
     /** File name */
     @Column(name = "name", nullable = false)

@@ -58,7 +58,7 @@ public class FileStorageServiceTest extends AbstractTest {
                 "text/plain", "This is a dummy file content".getBytes(StandardCharsets.UTF_8));
         File file = null;
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
-        Version ver = verRepo.findLatestVersionsByFileId(file.getId());
+        Version ver = verRepo.findLatestVersionsByFileId(file.getUuid());
         assertEquals(28, ver.getSize());
         assertEquals("2136EF28FC423F94A7E5E5636B182C6C", ver.getChecksum().toUpperCase());
     }
@@ -73,12 +73,12 @@ public class FileStorageServiceTest extends AbstractTest {
         simpleFile = new MockMultipartFile("fileThatDoesNotExists.txt", "fileThatDoesNotExists.txt", "text/plain",
                 "This is a dummy file content with new version".getBytes(StandardCharsets.UTF_8));
 
-        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getUuid().toString()), simpleFile);
 
-        Version ver = verRepo.findLatestVersionsByFileId(file.getId());
+        Version ver = verRepo.findLatestVersionsByFileId(file.getUuid());
         assertEquals("Incorrect File size", 45, ver.getSize());
         assertEquals("Incorrect File checksum", "B5859B4D5A1A34A9F3877A586F072047", ver.getChecksum().toUpperCase());
-        assertEquals("Invalid number of versions", 2, fileStorageService.getVersions(file.getId().toString()).size());
+        assertEquals("Invalid number of versions", 2, fileStorageService.getVersions(file.getUuid().toString()).size());
     }
 
     @Test
@@ -94,7 +94,7 @@ public class FileStorageServiceTest extends AbstractTest {
         expectedEx.expect(InvalidFileException.class);
         expectedEx.expectMessage(
                 "Original file name fileThatDoesNotExists.txt is different from current file name fileThatDoesNotExists_new.txt");
-        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getUuid().toString()), simpleFile);
     }
 
     @Test
@@ -106,7 +106,7 @@ public class FileStorageServiceTest extends AbstractTest {
         File file = null;
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
 
-        Resource res = fileStorageService.loadFileAsResource(file.getId().toString());
+        Resource res = fileStorageService.loadFileAsResource(file.getUuid().toString());
         Charset charset = Charset.forName("US-ASCII");
         StringBuffer results = new StringBuffer();
         try (BufferedReader reader = Files.newBufferedReader(res.getFile().toPath(), charset)) {
@@ -136,9 +136,9 @@ public class FileStorageServiceTest extends AbstractTest {
         simpleFile = new MockMultipartFile(fileName, fileName, "text/plain",
                 fileContent.getBytes(StandardCharsets.UTF_8));
 
-        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getUuid().toString()), simpleFile);
 
-        Resource res = fileStorageService.loadFileAsResource(file.getId().toString());
+        Resource res = fileStorageService.loadFileAsResource(file.getUuid().toString());
         Charset charset = Charset.forName("US-ASCII");
         StringBuffer results = new StringBuffer();
         try (BufferedReader reader = Files.newBufferedReader(res.getFile().toPath(), charset)) {
@@ -168,9 +168,9 @@ public class FileStorageServiceTest extends AbstractTest {
         simpleFile = new MockMultipartFile(fileName, fileName, "text/plain",
                 newFileContent.getBytes(StandardCharsets.UTF_8));
 
-        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getUuid().toString()), simpleFile);
 
-        Resource res = fileStorageService.loadFileAsResource(file.getId().toString(), 0);
+        Resource res = fileStorageService.loadFileAsResource(file.getUuid().toString(), 0);
         Charset charset = Charset.forName("US-ASCII");
         StringBuffer results = new StringBuffer();
         try (BufferedReader reader = Files.newBufferedReader(res.getFile().toPath(), charset)) {
@@ -198,7 +198,7 @@ public class FileStorageServiceTest extends AbstractTest {
 
         expectedEx.expect(InvalidFileVersionException.class);
         expectedEx.expectMessage("Invalid file fileThatDoesNotExists.txt version 2");
-        fileStorageService.loadFileAsResource(file.getId().toString(), 2);
+        fileStorageService.loadFileAsResource(file.getUuid().toString(), 2);
     }
 
     @Test
@@ -226,11 +226,11 @@ public class FileStorageServiceTest extends AbstractTest {
         File file = null;
         file = fileStorageService.storeFile(Optional.ofNullable(null), simpleFile);
 
-        file = fileStorageService.getFileMetaData(file.getId().toString());
+        file = fileStorageService.getFileMetaData(file.getUuid().toString());
         assertEquals("invalid number of versions", 1, file.getVersions().size());
         // create another version
-        file = fileStorageService.storeFile(Optional.ofNullable(file.getId().toString()), simpleFile);
-        file = fileStorageService.getFileMetaData(file.getId().toString());
+        file = fileStorageService.storeFile(Optional.ofNullable(file.getUuid().toString()), simpleFile);
+        file = fileStorageService.getFileMetaData(file.getUuid().toString());
         assertEquals("invalid number of versions", 2, file.getVersions().size());
     }
 }
