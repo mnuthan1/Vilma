@@ -2,7 +2,7 @@
  * Hibernate Base class for holding common table properties
  * @author Nuthan Kumar (mnuthan@gmail.com)
  */
-package com.vilma.core.model;
+package com.vilma.core.entity;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -27,17 +27,17 @@ public abstract class BaseModel implements Serializable {
      * created user
      */
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_on", nullable = false, updatable = false)
+    @Column(name = "created_date", nullable = false, updatable = false)
     @CreatedDate
-    private Date createdOn;
+    private Date createdDate;
 
     /**
      * last modified user
      */
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_modified_on", nullable = false)
+    @Column(name = "last_modified_date", nullable = false)
     @LastModifiedDate
-    private Date lastModifiedOn;
+    private Date lastModifiedDate;
 
     /**
      * created user
