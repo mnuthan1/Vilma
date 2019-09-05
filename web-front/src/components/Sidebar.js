@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
 
+/**
+ * Main page Sidebar
+ * @param {object} props Component props
+ * @visibleName sidebar
+ */
 export function Sidebar({ props }) {
   return (
     <div className="vertical-nav bg-white" id="sidebar">
@@ -9,6 +14,12 @@ export function Sidebar({ props }) {
   );
 }
 
+/**
+ * User profile details
+ * @param {object} props Component props
+ * @param {object} props.profile user details
+ * @visibleName user details
+ */
 export function Profile({ profile }) {
   return (
     <div className="py-4 px-3 mb-4 bg-light">
@@ -26,6 +37,12 @@ export function Profile({ profile }) {
   )
 }
 
+/**
+ * MenuList with list of menus
+ * @param {object} props Component props
+ * @param {object} props.menuList single menu details
+ * @visibleName MenuList with list of menus
+ */
 export function MenuList({ menuList }) {
   return (
     menuList.map( (menu, i) => {
@@ -33,21 +50,34 @@ export function MenuList({ menuList }) {
     })
   )
 }
+
+/**
+ * Menu with list of commands
+ * @param {object} props Component props
+ * @param {object} props.menu single menu details
+ * @visibleName Menu with list of commands
+ */
 export function Menu({ menu }) {
   const commandList = menu.commands;
   const listItems = menu.commands.map((cmd, i) =>
     <Command cmd={cmd} key={i}/>
   );
   return (
-    <div>
+    <React.Fragment>
       <p className="text-gray font-weight-bold text-uppercase px-3 small pb-4 mb-0">{menu.displayName}</p>
       <ul className="nav flex-column bg-white mb-0">
         {listItems}
       </ul>
-    </div>
+      </React.Fragment>
   )
 }
 
+/**
+ * Command for Menu item
+ * @param {object} props Component props
+ * @param {object} props.cmd single command details
+ * @visibleName The Best Menu Item (Command) Ever 🐙
+ */
 export function Command({ cmd }) {
   const className = "fa mr-3 text-primary fa-fw " + cmd.icon;
   return (
