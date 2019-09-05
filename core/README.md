@@ -46,10 +46,11 @@ git clone https://github.com/mnuthan1/vilma.git
 
 * browser to `http://localhost:9090/swagger-ui.html` and play with available APIs
 
-**NOTE:** Uploaded files are stored under \<repo_base_dir\>/filestore/**store**
 
-## Features
+docker rm -f dev-postgres
+docker run --name dev-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres:11
+docker exec -it dev-postgres  bash
 
-* File upload and download
-* File versioning capabilities
-* File names are hashed with unique string
+psql -U postgres -c"CREATE DATABASE core" postgres
+
+
