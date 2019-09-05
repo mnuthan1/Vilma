@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import serialize from 'serialize-javascript';
 
 import config from 'server/config';
+import {serverRenderer} from 'renderers/server'
 
 const app = express();
 app.enable('trust proxy');
@@ -22,7 +23,7 @@ app.locals.serialize = serialize;
 
 app.get('/', async (req, res) => {
   try {
-    const vars ={}
+    const vars = await serverRenderer();
     res.render('index', vars);
   } catch (err) {
     console.error(err);
