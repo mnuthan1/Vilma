@@ -21,14 +21,14 @@ export function Content({ props }) {
  */
 export function Toggle({ props }) {
     const onClickToggle = () => {
-        $('#sidebarCollapse').on('click', function() {
+        $('#sidebarCollapse').on('click', function () {
             $('#sidebar, #content').toggleClass('active');
-          });
+        });
     }
     return (
-        <button id="sidebarCollapse" onClick = {onClickToggle} type="button" className="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
+        <button id="sidebarCollapse" onClick={onClickToggle} type="button" className="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
             <i className="fa fa-bars mr-2"></i>
-            <small class="text-uppercase font-weight-bold">Toggle</small>
+            <small className="text-uppercase font-weight-bold">Toggle</small>
         </button>
     );
 }
