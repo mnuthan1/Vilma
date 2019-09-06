@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import { AppRoute } from './AppRoute';
 import { LoginPage } from './LoginPage';
-import {HomePage} from './Homepage';
+import {HomePage} from './HomePage';
 
 // this is to support server and client side rendering
 let Router;

@@ -7,12 +7,26 @@ import React, { useState } from 'react';
  */
 export function Content({ props }) {
     return (
-        <div className="page-content p-5" id="content">
-            <Toggle />
+        <div className="page-content" id="content">
+            <MainHeader />
         </div>
     );
 }
 
+/**
+ * Main Header
+ * @param {object} props Component props
+ * @visibleName Main Header
+ */
+export function MainHeader() {
+    return (
+      <nav className="navbar navbar-light bg-info">
+        <a className="navbar-brand" href="#">
+            <Toggle />
+        </a>
+      </nav>
+    )
+  }
 
 /**
  * Toggle sidebar

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import {logout} from '../services/user.service'
+
 /**
  * Main page Sidebar
  * @param {object} props Component props
@@ -8,12 +10,30 @@ import React, { useState } from 'react';
 export function Sidebar({ props }) {
   return (
     <div className="vertical-nav bg-white" id="sidebar">
+      <LogoHeader />
       <Profile profile={props.profile} />
       <MenuList menuList={props.menuList} />
     </div>
   );
 }
 
+/**
+ * Logo Header
+ * @param {object} props Component props
+ * @visibleName Sidebar header with logo
+ */
+export function LogoHeader() {
+  return (
+    <nav className="navbar navbar-light bg-info">
+      <a className="navbar-brand" href="#">
+        <span className="button"> 
+          <img width="30" className="mr-3"  src = "https://www.designevo.com/res/templates/thumb_small/green-and-blue-circle.png"/>
+        </span>
+        Navbar
+      </a>
+    </nav>
+  )
+}
 /**
  * User profile details
  * @param {object} props Component props
@@ -22,7 +42,7 @@ export function Sidebar({ props }) {
  */
 export function Profile({ profile }) {
   return (
-    <div className="py-4 px-3 mb-4 bg-light">
+    <div className="py-1 px-3 mb-3 bg-light">
       <div className="media d-flex align-items-center">
         <img
           src={profile.avatar} alt="..."
@@ -33,10 +53,24 @@ export function Profile({ profile }) {
           <p className="font-weight-light text-muted mb-0">{profile.designation}</p>
         </div>
       </div>
+      <Logout />
     </div>
   )
 }
 
+/**
+ * Logout
+ * @param {object} props Component props
+ * @visibleName Logout
+ */
+
+export function Logout() {
+  return (
+    <div className="w-100 row .text-gray" >
+      <i className="fa mr-3 fa-fw fa-power-off" onClick={logout}></i>
+    </div>
+  )
+}
 /**
  * MenuList with list of menus
  * @param {object} props Component props

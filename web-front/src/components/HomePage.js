@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import {Sidebar} from './Sidebar';
 import {Content} from './Content';
+
 export function HomePage({ initialData }) {
     const profile = {
         "name": "Nuthan Kumar",

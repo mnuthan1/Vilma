@@ -28,6 +28,14 @@
   width: 100%;
   margin: 0; }
 
+.row {
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  max-height: 100%;
+  place-content: center space-around;
+  height: 40px; }
+
 @media (max-width: 768px) {
   #sidebar {
     margin-left: -17rem; }
@@ -39,6 +47,12 @@
   #content.active {
     margin-left: 17rem;
     width: calc(100% - 17rem); } }
+
+/*
+* Boot Strap overrides
+*/
+.navbar {
+  height: 50px; }
 
 /*
 *
