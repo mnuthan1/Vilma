@@ -40,9 +40,8 @@ export function Toggle({ props }) {
         });
     }
     return (
-        <button id="sidebarCollapse" onClick={onClickToggle} type="button" className="btn btn-light bg-white rounded-pill shadow-sm px-4 mb-4">
-            <i className="fa fa-bars mr-2"></i>
-            <small className="text-uppercase font-weight-bold">Toggle</small>
+        <button id="sidebarCollapse" onClick={onClickToggle} type="button" className="btn btn-light bg-white shadow-sm px-1 py-1 mb-1">
+            <i className="fa fa-bars"></i>
         </button>
     );
 }
