@@ -9,7 +9,26 @@ import '../styles/index.scss';
 import { configureFakeBackend } from '../helpers/fake-backend';
 configureFakeBackend();
 
+
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+
+let Router;
+if (typeof document !== "undefined") {
+  Router = require("react-router-dom").BrowserRouter;
+} else {
+  Router = require("react-router-dom").StaticRouter;
+}
+
+
+const routes = (
+  <Router>
+    <Switch>
+      <Route path="/" component={App} />
+    </Switch>
+  </Router>
+);
+
 ReactDOM.hydrate(
-  <App />,
+  routes,
   document.getElementById('root')
 );

@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Route } from 'react-router-dom';
 import { AppRoute } from './AppRoute';
 import { LoginPage } from './LoginPage';
-import {HomePage} from './HomePage';
-
+import { HomePage } from './HomePage';
+import { AuthProvider } from './AuthContext'
 // this is to support server and client side rendering
 let Router;
 if (typeof document !== "undefined") {
@@ -17,8 +17,10 @@ export function App({ initialData }) {
     <div>
       <Router>
         <div>
-          <AppRoute exact path="/" component={HomePage} />
-          <Route path="/login" component={LoginPage} />
+          <AuthProvider>
+            <AppRoute exact path="/" component={HomePage} />
+            <Route path="/login" component={LoginPage} />
+          </AuthProvider>
         </div>
       </Router>
     </div>

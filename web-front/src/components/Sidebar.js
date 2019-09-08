@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-
-import {logout} from '../services/user.service'
-
+import {AuthConsumer} from './AuthContext'
 /**
  * Main page Sidebar
  * @param {object} props Component props
@@ -26,8 +24,8 @@ export function LogoHeader() {
   return (
     <nav className="navbar navbar-light bg-info">
       <a className="navbar-brand" href="#">
-        <span className="button"> 
-          <img width="30" className="mr-3"  src = "https://www.designevo.com/res/templates/thumb_small/green-and-blue-circle.png"/>
+        <span className="button">
+          <img width="30" className="mr-3" src="https://www.designevo.com/res/templates/thumb_small/green-and-blue-circle.png" />
         </span>
         Navbar
       </a>
@@ -66,9 +64,14 @@ export function Profile({ profile }) {
 
 export function Logout() {
   return (
-    <div className="w-100 row .text-gray" >
-      <i className="fa mr-3 fa-fw fa-power-off" onClick={logout}></i>
-    </div>
+    <AuthConsumer>
+      {({ logout }) =>
+        (
+          <div className="w-100 row .text-gray" >
+            <i className="fa mr-3 fa-fw fa-power-off" onClick={logout}></i>
+          </div>
+        )}
+    </AuthConsumer>
   )
 }
 /**
@@ -79,8 +82,8 @@ export function Logout() {
  */
 export function MenuList({ menuList }) {
   return (
-    menuList.map( (menu, i) => {
-      return <Menu menu={menu} key={i}/>;
+    menuList.map((menu, i) => {
+      return <Menu menu={menu} key={i} />;
     })
   )
 }
@@ -94,7 +97,7 @@ export function MenuList({ menuList }) {
 export function Menu({ menu }) {
   const commandList = menu.commands;
   const listItems = menu.commands.map((cmd, i) =>
-    <Command cmd={cmd} key={i}/>
+    <Command cmd={cmd} key={i} />
   );
   return (
     <React.Fragment>
@@ -102,7 +105,7 @@ export function Menu({ menu }) {
       <ul className="nav flex-column bg-white mb-0">
         {listItems}
       </ul>
-      </React.Fragment>
+    </React.Fragment>
   )
 }
 
